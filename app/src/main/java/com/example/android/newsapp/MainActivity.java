@@ -16,7 +16,10 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<News>> {
@@ -44,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      * TextView that is displayed when the list is empty
      */
     private TextView mEmptyStateTextView;
+
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    Date date = new Date();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         uriBuilder.appendQueryParameter("q", "debates");
         uriBuilder.appendQueryParameter("api-key", "test");
+        uriBuilder.appendQueryParameter("from-date", dateFormat.format(date));
 
         return new NewsLoader(this, uriBuilder.toString());
     }

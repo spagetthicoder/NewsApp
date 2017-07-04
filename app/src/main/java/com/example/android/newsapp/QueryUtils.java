@@ -79,31 +79,34 @@ public class QueryUtils {
             // which represents a list of features (or earthquakes).
             JSONObject responseObject = baseJsonResponse.getJSONObject("response");
 
-            JSONArray newsArray = responseObject.getJSONArray("results");
+            if (baseJsonResponse.has("response")) {
 
-            // For each earthquake in the earthquakeArray, create an {@link Earthquake} object
-            for (int i = 0; i < newsArray.length(); i++) {
+                JSONArray newsArray = responseObject.getJSONArray("results");
 
-                // Get a single earthquake at position i within the list of earthquakes
-                JSONObject currentNews = newsArray.getJSONObject(i);
+                // For each earthquake in the earthquakeArray, create an {@link Earthquake} object
+                for (int i = 0; i < newsArray.length(); i++) {
 
-                // Extract the value for the key called "sectionName"
-                String section = currentNews.getString("sectionName");
-                // Extract the value for the key called "webTitle"
-                String title = currentNews.getString("webTitle");
+                    // Get a single earthquake at position i within the list of earthquakes
+                    JSONObject currentNews = newsArray.getJSONObject(i);
 
-                // Extract the value for the key called "webPublicationDate"
-                String datetime = currentNews.getString("webPublicationDate");
+                    // Extract the value for the key called "sectionName"
+                    String section = currentNews.getString("sectionName");
+                    // Extract the value for the key called "webTitle"
+                    String title = currentNews.getString("webTitle");
 
-                // Extract the value for the key called "url"
-                String url = currentNews.getString("webUrl");
+                    // Extract the value for the key called "webPublicationDate"
+                    String datetime = currentNews.getString("webPublicationDate");
 
-                // Create a new {@link Earthquake} object with the magnitude, location, time,
-                // and url from the JSON response.
-                News newsObject = new News(url, section, title, datetime);
+                    // Extract the value for the key called "url"
+                    String url = currentNews.getString("webUrl");
 
-                // Add the new {@link News} to the list of news.
-                news.add(newsObject);
+                    // Create a new {@link Earthquake} object with the magnitude, location, time,
+                    // and url from the JSON response.
+                    News newsObject = new News(url, section, title, datetime);
+
+                    // Add the new {@link News} to the list of news.
+                    news.add(newsObject);
+                }
             }
 
         } catch (JSONException e) {
