@@ -34,7 +34,7 @@ public class QueryUtils {
     /**
      * Query the Guardian API and return a list of {@link News} objects.
      */
-    public static List<News> fetchEarthquakeData(String requestUrl) {
+    public static List<News> fetchNewsData(String requestUrl) {
 
         // Create URL object
         URL url = createUrl(requestUrl);
@@ -47,10 +47,10 @@ public class QueryUtils {
             Log.e(LOG_TAG, "Problem making the HTTP request.", e);
         }
 
-        // Extract relevant fields from the JSON response and create a list of {@link Earthquake}s
+        // Extract relevant fields from the JSON response and create a list of {@link News}
         List<News> news = extractFeatureFromJson(jsonResponse);
 
-        // Return the list of {@link Earthquake}s
+        // Return the list of {@link News}
         return news;
     }
 
@@ -58,13 +58,13 @@ public class QueryUtils {
      * Return a list of {@link News} objects that has been built up from
      * parsing the given JSON response.
      */
-    private static List<News> extractFeatureFromJson(String earthquakeJSON) {
+    private static List<News> extractFeatureFromJson(String newsJSON) {
         // If the JSON string is empty or null, then return early.
-        if (TextUtils.isEmpty(earthquakeJSON)) {
+        if (TextUtils.isEmpty(newsJSON)) {
             return null;
         }
 
-        // Create an empty ArrayList that we can start adding earthquakes to
+        // Create an empty ArrayList that we can start adding news to
         List<News> news = new ArrayList<>();
 
         // Try to parse the JSON response string. If there's a problem with the way the JSON
@@ -73,20 +73,20 @@ public class QueryUtils {
         try {
 
             // Create a JSONObject from the JSON response string
-            JSONObject baseJsonResponse = new JSONObject(earthquakeJSON);
+            JSONObject baseJsonResponse = new JSONObject(newsJSON);
 
             // Extract the JSONArray associated with the key called "features",
-            // which represents a list of features (or earthquakes).
+            // which represents a list of features (or news).
             JSONObject responseObject = baseJsonResponse.getJSONObject("response");
 
             if (baseJsonResponse.has("response")) {
 
                 JSONArray newsArray = responseObject.getJSONArray("results");
 
-                // For each earthquake in the earthquakeArray, create an {@link Earthquake} object
+                // For each news in the newsArray, create an {@link News} object
                 for (int i = 0; i < newsArray.length(); i++) {
 
-                    // Get a single earthquake at position i within the list of earthquakes
+                    // Get a single news at position i within the list of news
                     JSONObject currentNews = newsArray.getJSONObject(i);
 
                     // Extract the value for the key called "sectionName"
@@ -100,7 +100,7 @@ public class QueryUtils {
                     // Extract the value for the key called "url"
                     String url = currentNews.getString("webUrl");
 
-                    // Create a new {@link Earthquake} object with the magnitude, location, time,
+                    // Create a new {@link News} object with the magnitude, location, time,
                     // and url from the JSON response.
                     News newsObject = new News(url, section, title, datetime);
 
@@ -113,7 +113,7 @@ public class QueryUtils {
             // If an error is thrown when executing any of the above statements in the "try" block,
             // catch the exception here, so the app doesn't crash. Print a log message
             // with the message from the exception.
-            Log.e("QueryUtils", "Problem parsing the earthquake JSON results", e);
+            Log.e("QueryUtils", "Problem parsing the news JSON results", e);
         }
 
         // Return the list of news
@@ -162,7 +162,7 @@ public class QueryUtils {
                 Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
             }
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem retrieving the earthquake JSON results.", e);
+            Log.e(LOG_TAG, "Problem retrieving the news JSON results.", e);
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
